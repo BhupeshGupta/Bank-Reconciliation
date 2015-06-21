@@ -1,4 +1,4 @@
-reconApp.controller('ruleController', function ($stateParams, $http, $scope, getFeedMockRules, getFeedMockAccount) {
+reconApp.controller('ruleController', function ($stateParams, $http, $scope, getFeedMockRules, getFeedLiveAccountBank) {
     if ($stateParams.amt) {
         $scope.newRule = {};
         $scope.newRule.subrules = [
@@ -21,7 +21,7 @@ reconApp.controller('ruleController', function ($stateParams, $http, $scope, get
     }, null);
 
     $scope.querySearch = function (query) {
-        return getFeedMockAccount.getFeed();
+        return getFeedLiveAccountBank.liveFeed(query);
     };
 
     $scope.editRule = function (index) {

@@ -16,7 +16,7 @@ reconApp.config(function ($httpProvider) {
 
 
 // Get Accounts and Bank from API
-reconApp.service('getFeedLiveAccountBank', ['$http', function ($http) {
+reconApp.service('getFeedLiveAccountBank', ['$http', '$q', function ($http, $q) {
     this.liveFeed = function (search, filters) {
         if (!search)
             search = '';
@@ -30,24 +30,49 @@ reconApp.service('getFeedLiveAccountBank', ['$http', function ($http) {
             cmd: 'frappe.widgets.search.search_link',
             _type: 'POST'
         };
-        return $http.post(serverBaseUrl, $.param(snd));
+
+        var promise = $q.defer();
+
+        $http.post(serverBaseUrl, $.param(snd)).success(function (data) {
+            promise.resolve(data.results);
+        });
+
+        return promise.promise;
     };
 }]);
 
 
 // Get Bank Statements
-reconApp.service('getFeedLiveBankStatements', ['$http', function ($http) {
+reconApp.service('getFeedLiveBankStatements', ['$http', '$q', function ($http, $q) {
     this.liveFeed = function (bank) {
-        if (!bank)
-            return false;
-        var snd = {
-            txt: search,
-            doctype: 'Account',
-            filters: JSON.stringify(filters),
-            cmd: 'frappe.widgets.search.search_link',
-            _type: 'POST'
-        };
-        return $http.post(serverBaseUrl, $.param(snd));
+        var data = {
+            fields: JSON.stringify(["name", "from_date", "to_date", "txn_count", "reconciled"]),
+            filters: JSON.stringify({
+                bank: bank
+            })
+        }
+        var promise = $q.defer();
+        var url = serverBaseUrl + 'api/resource/Bank Statement?' + $.param(data);
+        $http.get(url).success(function (data) {
+            promise.resolve(data.data);
+        });
+        return promise.promise;
+    };
+}]);
+
+
+// Get Bank Reconcile Statements
+reconApp.service('getFeedLiveReconcileStatements', ['$http', '$q', function ($http, $q) {
+    this.liveFeed = function (bank) {
+        var data = {
+            bank: bank
+            };
+        var promise = $q.defer();
+        var url = serverBaseUrl + 'api/method/erpnext.accounts.doctype.bank_statement.bank_statement.get_recon_list';
+        $http.post(url, $.param(data)).success(function (data) {
+            promise.resolve(data.message);
+        });
+        return promise.promise;
     };
 }]);
 
@@ -65,31 +90,6 @@ reconApp.service('getFeedLiveBankRules', ['$http', function ($http) {
             _type: 'POST'
         };
         return $http.post(serverBaseUrl, $.param(snd));
-    };
-}]);
-
-
-// Get Bank Reconcile Statements
-reconApp.service('getFeedLiveReconcileStatements', ['$http', function ($http) {
-    this.liveFeed = function (bank) {
-        if (!bank)
-            return false;
-        var snd = {
-            txt: search,
-            doctype: 'Account',
-            filters: JSON.stringify(filters),
-            cmd: 'frappe.widgets.search.search_link',
-            _type: 'POST'
-        };
-        return $http.post(serverBaseUrl, $.param(snd));
-    };
-}]);
-
-
-
-reconApp.service('getFeedLive', ['$http', function ($http) {
-    this.getFeed = function () {
-        return $http.get('https://dl.dropboxusercontent.com/u/12174655/al_sample_txns.json');
     };
 }]);
 

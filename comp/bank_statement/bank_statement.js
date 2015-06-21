@@ -1,9 +1,9 @@
-reconApp.controller('bankStatementController', function ($scope, $http, getFeedMockBankStatement) {
-
-    getFeedMockBankStatement.getFeed().then(function (data) {
+reconApp.controller('bankStatementController', function ($scope, $http, getFeedLiveBankStatements) {
+    getFeedLiveBankStatements.liveFeed($scope.bank.value).then(function (data) {
         $scope.bank_statement = data;
     }, null);
 
+    // Upload File Data
     $scope.$watch('fdata', function () {
         if (!$scope.fdata)
             return;
@@ -19,7 +19,7 @@ reconApp.controller('bankStatementController', function ($scope, $http, getFeedM
                 bank: bank
             })
         };
-        
+
         $http.post(serverBaseUrl, $.param(snd));
     });
 });

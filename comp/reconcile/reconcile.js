@@ -1,5 +1,5 @@
-reconApp.controller('reconcileController', function ($http, $scope, getFeedMockBankCheckStatment, getFeedMockAccount) {
-    var data_promise_bank = getFeedMockBankCheckStatment.getFeed();
+reconApp.controller('reconcileController', function ($http, $scope, $mdToast, getFeedLiveReconcileStatements, getFeedLiveAccountBank) {
+    var data_promise_bank = getFeedLiveReconcileStatements.liveFeed($scope.bank.value);
     data_promise_bank.then(function (data) {
         for (feed in data) {
             var feed_obj = data[feed];
@@ -20,11 +20,36 @@ reconApp.controller('reconcileController', function ($http, $scope, getFeedMockB
     };
 
     $scope.querySearch = function (query) {
-        return getFeedMockAccount.getFeed();
+        return getFeedLiveAccountBank.liveFeed(query);
     };
 
     $scope.reconTxn = function (index) {
-        $scope.bank_feed.splice(index, 1);
+        var bank = $scope.bank_feed[index];
+        if (bank.default_tab == 0) {
+            account = '';
+            ref = '';
+            voucher_id = bank.match[0]['id'];
+        } else {
+            voucher_id = '';
+            var toastAcc = $mdToast.simple()
+                .content('Add Account')
+                .highlightAction(false);
+            var toastRef = $mdToast.simple()
+                .content('Add Remarks')
+                .highlightAction(false);
+            account = bank.create.account ? bank.create.account.value :$mdToast.show(toastAcc) ;
+            ref = bank.create.remarks ? bank.create.remarks : $mdToast.show(toastRef);
+        }
+        var data = {
+            bank_txn_id: bank.bank_txn.bank_txn_id,
+            voucher_id: voucher_id,
+            account: account,
+            ref: ref
+        };
+        var url = serverBaseUrl + 'api/method/erpnext.accounts.doctype.bank_statement.bank_statement.recon';
+        $http.post(url, $.param(data)).success(function (data) {
+            $scope.bank_feed.splice(index, 1);
+        });
     };
 
 });

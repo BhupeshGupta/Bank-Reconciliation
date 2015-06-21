@@ -5,9 +5,9 @@ var reconApp = angular.module('reconApp', ['ngMaterial', 'ui.router']);
 reconApp.controller('selectBank', function ($http, $scope, getFeedLiveAccountBank) {
     getFeedLiveAccountBank.liveFeed('', filters = {
         account_type: 'Bank'
-    }).success(function (data) {
-        $scope.banks = data.results;
-    });
+    }).then(function (data) {
+        $scope.banks = data;
+    }, null);
 
     $scope.$watch('bank', function () {
         if (!$scope.bank)
