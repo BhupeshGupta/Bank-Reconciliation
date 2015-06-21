@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-xs-3 col-xs-offset-9">
+        <a ui-sref="create_rule({ref : feed.bank_txn.description , amt : feed.bank_txn.txn_amt })">Create Rule</a>
+    </div>
+    <br>
+</div>
+<md-card>
+    <md-card-content style="padding:8px;">
+        <div class="row">
+            <div class="col-xs-1">
+                <span class="glyphicon glyphicon-remove"></span>
+            </div>
+            <div class="col-xs-5">
+                {{ feed.bank_txn.description }}
+            </div>
+            <div class="col-xs-3" style="background-color:#D3D3D3; min-height:90">
+                <span ng-if="feed.bank_txn.cr_dr == 'DR'">
+                                            {{ feed.bank_txn.txn_amt }}
+                                        </span>
+            </div>
+            <div class="col-xs-3">
+                <span ng-if="feed.bank_txn.cr_dr == 'CR'">
+                                            {{ feed.bank_txn.txn_amt }}
+                                        </span>
+            </div>
+        </div>
+    </md-card-content>
+</md-card>

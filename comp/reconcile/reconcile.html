@@ -1,0 +1,56 @@
+<div>
+    <md-list>
+        <md-subheader class="md-no-sticky">
+            <div class="row">
+                <div class="col-xs-5">
+                    Bank Statement
+                    <br>
+                    <br>
+                    <hr style="margin:0; border:0; border-top: 1px solid rgba(0,0,0,0.54);">
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-3 col-xs-offset-6">Debit
+                            <br>
+                            <br>(Spent)</div>
+                        <div class="col-xs-3">Credit
+                            <br>
+                            <br>(Received)</div>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                </div>
+                <div class="col-xs-5">
+                    ERP Statement
+                    <br>
+                    <br>
+                    <hr style="margin:0; border:0; border-top: 1px solid rgba(0,0,0,0.54);">
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-3 col-xs-offset-6">Debit
+                            <br>
+                            <br>(Spent)</div>
+                        <div class="col-xs-3">Credit
+                            <br>
+                            <br>(Received)</div>
+                    </div>
+                </div>
+            </div>
+
+        </md-subheader>
+        <md-list-item class="md-3-line" ng-repeat="feed in bank_feed">
+            <div class="row md-list-item-text" style="padding-top:0px;">
+                <div class="col-xs-5" ng-include="'comp/reconcile/bank_template.html'">
+                </div>
+                <div class="col-xs-2" align='center'>
+                    <br>
+                    <br>
+                    <md-button class="md-raised" ng-click="reconTxn($index)">OK</md-button>
+                </div>
+                <div class="col-xs-5" ng-include="'comp/reconcile/action_template.html'"></div>
+            </div>
+        </md-list-item>
+        <md-divider></md-divider>
+    </md-list>
+</div>

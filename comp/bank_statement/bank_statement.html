@@ -1,0 +1,51 @@
+<div>
+    <div align="right">
+        <md-button class="md-raised md-primary">
+            <label for="file-input">Upload</label>
+        </md-button>
+        <input id="file-input" fileread="fdata" style="display:none;" type="file">
+    </div>
+    <div class="row" style="margin-left:20px">
+        <md-list>
+            <md-subheader class="md-no-sticky">
+                <div class="row md-list-item-text">
+                    <div class="col-xs-3">
+                        ID
+                    </div>
+                    <div class="col-xs-3">
+                        From
+                    </div>
+                    <div class="col-xs-3">
+                        To
+                    </div>
+                    <div class="col-xs-2">
+                        No. Of Lines
+                    </div>
+                    <div class="col-xs-1">
+                        Reconcile
+                    </div>
+                </div>
+            </md-subheader>
+            <md-list-item class="md-3-line" ng-repeat="statement in bank_statement">
+                <div class="row md-list-item-text" style="padding:3px;">
+                    <div class="col-xs-3">
+                        {{statement.bank}}
+                    </div>
+                    <div class="col-xs-3">
+                        {{statement.from_date}}
+                    </div>
+                    <div class="col-xs-3">
+                        {{statement.to_date}}
+                    </div>
+                    <div class="col-xs-2">
+                        {{statement.txn_count}}
+                    </div>
+                    <div class="col-xs-1">
+                        {{statement.reconciled}}
+                    </div>
+                </div>
+            </md-list-item>
+            <md-divider></md-divider>
+        </md-list>
+    </div>
+</div>

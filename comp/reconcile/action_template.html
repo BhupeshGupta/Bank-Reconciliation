@@ -1,0 +1,77 @@
+<md-card>
+    <md-card-content>
+        <md-tabs md-dynamic-height md-border-bottom md-selected="feed.default_tab" class="md-primary" md-align-tabs="top">
+            <md-tab id="match">
+                <md-tab-label>Match</md-tab-label>
+                <md-tab-body>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            {{ feed.match[0].against_account }}
+                        </div>
+                        <div class="col-xs-3">
+                            <span ng-if="feed.match[0].cr_dr == 'DR'">
+                                                        {{ feed.match[0].amount }}
+                                                    </span>
+                        </div>
+                        <div class="col-xs-3">
+                            <span ng-if="feed.match[0].cr_dr == 'CR'">
+                                                        {{ feed.match[0].amount }}
+                                                    </span>
+                        </div>
+                    </div>
+                    Reference:
+                    <br> {{ feed.match[0].ref }}
+                    <br>
+                    <br>
+                    <div ng-if="feed.match.length > 1">
+                        <a ng-click="toggleMatchView($index)">Expand</a>
+
+                    </div>
+                    <div ng-show="feed.match_expanded">
+                        <md-list-item class="md-3-line" ng-repeat="m in feed.match">
+                            <div class="row md-list-item-text">
+                                <div class="col-xs-6">
+                                    <a ng-click="selectNew($parent.$index,$index)">{{ m.against_account }}</a>
+                                </div>
+                                <div class="col-xs-3">
+                                    <span ng-if="m.cr_dr == 'DR'">
+                                                        {{ m.amount }}
+                                                    </span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <span ng-if="m.cr_dr == 'CR'">
+                                                        {{ m.amount }}
+                                                    </span>
+                                </div>
+                            </div>
+                        </md-list-item>
+                    </div>
+                </md-tab-body>
+            </md-tab>
+            <md-tab id="create">
+                <md-tab-label>Create</md-tab-label>
+                <md-tab-body>
+                    <md-autocomplete md-no-cache="true" md-items="item in querySearch(searchText)" md-selected-item="feed.create.account" md-floating-label="Account" md-item-text="item.value" md-search-text="searchText" md-min-length="1">
+                        <md-item-template>
+                            <span>{{item.value}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            No matches found for "{{searchText}}".
+                        </md-not-found>
+                    </md-autocomplete>
+
+
+
+                    <md-input-container>
+                        <label>Remarks</label>
+                        <input ng-model="feed.create.remarks" required name="remarks" ng-model="project.clientName">
+                        <div ng-messages="projectForm.clientName.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </md-tab-body>
+            </md-tab>
+        </md-tabs>
+    </md-card-content>
+</md-card>

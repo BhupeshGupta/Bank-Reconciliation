@@ -1,155 +1,54 @@
 <html>
 
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <!-- Latest compiled and minified CSS -->
+    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
-    <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.css">  -->
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.js"></script>
-    <script src="angularJS.js"></script>
-
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+    <script src="incl/jquery.min.js"></script>
+    <link rel="stylesheet" href="incl/bootstrap.min.css">
+    <script src="incl/bootstrap.min.js"></script>
+    <script src="incl/angular.js"></script>
+    <script src="incl/angular-animate.min.js"></script>
+    <script src="incl/angular-aria.min.js"></script>
+    <script src="incl/angular-material.min.js"></script>
+    <link rel="stylesheet" href="incl/angular-material.min.css">
+    <script src="incl/angular-ui-router.js"></script>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
-
+    <script src="angularJS.js"></script>
+    <script src="services.js"></script>
+    <script src="comp/reconcile/reconcile.js"></script>
+    <script src="comp/rules/rules.js"></script>
+    <script src="comp/bank_statement/bank_statement.js"></script>
     <meta name="viewport" content="initial-scale=1" />
-
 </head>
 
 <body ng-app='reconApp'>
-    <div class="container" ng-controller="bankController">
-        <md-list>
-            <md-subheader class="md-no-sticky">3 line item</md-subheader>
-            <md-list-item class="md-3-line" ng-repeat="feed in bank_feed">
-                <div class="row md-list-item-text">
-                    <div class="col-xs-5">
-                        <div class="row">
-                            <div class="col-xs-9"></div>
-                            <a href="#">
-                                <div class="col-xs-3">create rule</div>
-                            </a>
-                            <br>
-                        </div>
-                        <md-card>
-                            <md-card-content>
-                                <div class="row">
-                                    <div class="col-xs-1">
-                                        <span class="glyphicon glyphicon-remove"></span>
-                                    </div>
-                                    <div class="col-xs-5">
-                                        {{ feed.bank_txn.description }}
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <span ng-if="feed.bank_txn.cr_dr == 'DR'">
-                                            {{ feed.bank_txn.txn_amt }}
-                                        </span>
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <span ng-if="feed.bank_txn.cr_dr == 'CR'">
-                                            {{ feed.bank_txn.txn_amt }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </md-card-content>
-                        </md-card>
-                    </div>
-                    <div class="col-xs-2" align='center'>
-                        <br>
-                        <br>
-                        <md-button class="md-raised" ng-click="reconTxn($index)">OK</md-button>
-                    </div>
-                    <div class="col-xs-5">
-                        <md-card>
-                            <md-card-content>
-                                <md-tabs md-dynamic-height md-border-bottom md-selected="feed.default_tab" class="md-primary md-hue-2" md-align-tabs="top">
-                                    <md-tab id="match">
-                                        <md-tab-label>Match</md-tab-label>
-                                        <md-tab-body>
-                                            <br>
-                                            <div class="row">
-                                                <div class="col-xs-6">
-                                                    {{ feed.match[0].against_account }}
-                                                </div>
-                                                <div class="col-xs-3">
-                                                    <span ng-if="feed.match[0].cr_dr == 'DR'">
-                                                        {{ feed.match[0].amount }}
-                                                    </span>
-                                                </div>
-                                                <div class="col-xs-3">
-                                                    <span ng-if="feed.match[0].cr_dr == 'CR'">
-                                                        {{ feed.match[0].amount }}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            Reference:
-                                            <br> {{ feed.match[0].ref }}
-                                            <br>
-                                            <br>
-                                            <div ng-if="feed.match.length > 1">
-                                                <a ng-click="toggleMatchView($index)">Expand</a>
-
-                                            </div>
-                                            <div ng-show="feed.match_expanded">
-                                                <md-list-item class="md-3-line" ng-repeat="m in feed.match">
-                                                    <div class="row md-list-item-text">
-                                                        <div class="col-xs-6">
-                                                            <a ng-click="selectNew($parent.$index,$index)">{{ m.against_account }}</a>
-                                                        </div>
-                                                        <div class="col-xs-3">
-                                                            <span ng-if="m.cr_dr == 'DR'">
-                                                        {{ m.amount }}
-                                                    </span>
-                                                        </div>
-                                                        <div class="col-xs-3">
-                                                            <span ng-if="m.cr_dr == 'CR'">
-                                                        {{ m.amount }}
-                                                    </span>
-                                                        </div>
-                                                    </div>
-                                                </md-list-item>
-                                            </div>
-                                        </md-tab-body>
-                                    </md-tab>
-                                    <md-tab id="create">
-                                        <md-tab-label>Create</md-tab-label>
-                                        <md-tab-body>
-
-
-
-                                            <md-autocomplete md-no-cache="true" md-items="item in querySearch(searchText)" md-selected-item="feed.create.account" md-floating-label="Account" md-item-text="item.value" md-search-text="searchText" md-min-length="1" >
-                                                <md-item-template>
-                                                    <span>{{item.value}}</span>
-                                                </md-item-template>
-                                                <md-not-found>
-                                                    No matches found for "{{searchText}}".
-                                                </md-not-found>
-                                            </md-autocomplete>
-
-
-
-                                            <md-input-container>
-                                                <label>Remarks</label>
-                                                <input ng-model="feed.create.remarks" required name="remarks" ng-model="project.clientName">
-                                                <div ng-messages="projectForm.clientName.$error">
-                                                    <div ng-message="required">This is required.</div>
-                                                </div>
-                                            </md-input-container>
-                                        </md-tab-body>
-                                    </md-tab>
-                                </md-tabs>
-                            </md-card-content>
-                        </md-card>
-                    </div>
-                </div>
-            </md-list-item>
-            <md-divider></md-divider>
-        </md-list>
+    <div class="container" ng-controller="selectBank">
+        <div class="row">
+            <div class="col-xs-2" style="border-right: thin solid #aaa;padding-right:0px;">
+                <p style="padding-top:15px;font-size:17px;"><strong>Statment Balance</strong>
+                    <br>1235</p>
+            </div>
+            <div class="col-xs-2">
+                <p style="padding-top:15px;font-size:17px;"><strong>Balance in ERP</strong>
+                    <br>1235</p>
+            </div>
+            <div class="col-xs-3 col-xs-offset-4">
+                <md-select ng-model="bank" style="min-width: 200px;">
+                    <md-select-label ui-sref='bank_select' style="font-size:15px;">{{ bank ? bank.value : 'Select Bank' }}</md-select-label>
+                    <md-option ng-value="bank" style="font-size:15px;" ng-repeat="bank in banks">{{bank.value}}</md-option>
+                </md-select>
+            </div>
+        </div>
+        <div ng-show=" bank ? true : false" ui-view='on_bank_select'></div>
     </div>
 
 </body>

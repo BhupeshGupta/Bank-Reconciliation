@@ -1,0 +1,132 @@
+<div>
+    <br>
+    <div ng-show='ruleShow'>
+        <md-input-container style="width:400px" flex>
+            <label>Rule name</label>
+            <input ng-model='newRule.name' ng-disabled="newRule.nameDisable">
+        </md-input-container>
+
+        <md-select ng-model='newRule.type' style="min-width: 200px;">
+            <md-select-label>{{ newRule.type ? newRule.type : ' Type ' }}</md-select-label>
+            <md-option ng-value="'Credit'">Credit</md-option>
+            <md-option ng-value="'Debit'">Debit</md-option>
+            <md-option ng-value="'Both'">Both</md-option>
+        </md-select>
+
+        <md-select ng-model='newRule.matching' style="min-width: 200px;">
+            <md-select-label>{{ newRule.matching ? newRule.matching : ' Matching ' }}</md-select-label>
+            <md-option ng-value="'All'">All</md-option>
+            <md-option ng-value="'Any'">Any</md-option>
+        </md-select>
+
+        <md-autocomplete md-no-cache="true" md-items="item in querySearch(searchText)" md-selected-item="newRule.target_account" md-floating-label="Account" md-item-text="item.value" md-search-text="searchText" md-min-length="1">
+            <md-item-template>
+                <span>{{item.value}}</span>
+            </md-item-template>
+            <md-not-found>
+                No matches found for "{{searchText}}".
+            </md-not-found>
+        </md-autocomplete>
+
+        <br>
+        <p style="margin-bottom:0px">Sub Rules</p>
+        <br>
+
+        <div class="row">
+
+            <md-list>
+                <md-list-item class="md-3-line" ng-repeat="rule in newRule.subrules">
+                    <div class="col-xs-1" style="padding-top:30px;">
+                        {{ $index + 1 }}
+                    </div>
+                    <div class="col-xs-2">
+                        <md-select ng-model='rule.column' style="min-width:200px; padding:0; padding-top:25px; overflow:hidden;">
+                            <md-select-label>{{ rule.column ? rule.column : 'Column' }}</md-select-label>
+                            <md-option value="Reference">Reference</md-option>
+                            <md-option value="Amount">Amount</md-option>
+                            <md-option value="Date">Date</md-option>
+                        </md-select>
+                    </div>
+                    <div class="col-xs-2">
+                        <md-select ng-model='rule.eq_nq' style="min-width:200px; padding:0; padding-top:25px; overflow:hidden;">
+                            <md-select-label>{{ rule.eq_nq ? rule.eq_nq : 'Equal Or Not' }}</md-select-label>
+                            <md-option value="Equals">Equals</md-option>
+                            <md-option value="Not Equals">Not Equals</md-option>
+                        </md-select>
+                    </div>
+                    <div class="col-xs-2">
+                        <md-select ng-model='rule.ops' style="min-width:200px; padding:0; padding-top:25px; overflow:hidden;">
+                            <md-select-label>{{ rule.ops ? rule.ops : 'Operations' }}</md-select-label>
+                            <md-option value="Contains">Contains</md-option>
+                            <md-option value="Equal">Equal</md-option>
+                            <md-option value="Fuzzy">Fuzzy</md-option>
+                            <md-option value="Partial Fuzzy">Partial Fuzzy</md-option>
+                        </md-select>
+                    </div>
+                    <div class="col-xs-3">
+                        <md-input-container style="padding:0;" flex>
+                            <label>Value</label>
+                            <input ng-model='rule.value'>
+                        </md-input-container>
+                    </div>
+                    <div class="col-xs-2" ng-click="deleteSubRule($index)" style="padding-top:25px;">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <div align="right" style="margin-right:60px;">
+                <a ng-click="addSubRule()">Add Sub Rule</a>
+            </div>
+            <br>
+        </div>
+        <div>
+            <md-button ng-click="saveRule()">Save</md-button>
+        </div>
+    </div>
+    <br>
+    <br> Rules
+    <br>
+    <div class="row" style="margin-left:20px">
+        <md-list>
+            <md-subheader class="md-no-sticky">
+                <div class="row md-list-item-text">
+                    <div class="col-xs-3">
+                        Rule Name
+                    </div>
+                    <div class="col-xs-3">
+                        Target Account
+                    </div>
+                    <div class="col-xs-2">
+                        No. Of Conditions
+                    </div>
+                    <div class="col-xs-2">
+                        Rule Type
+                    </div>
+                    <div class="col-xs-2" style="padding-left:35px">
+                        Delete
+                    </div>
+                </div>
+            </md-subheader>
+            <md-list-item class="md-3-line" ng-repeat="rule in rules">
+                <div class="row md-list-item-text" style="padding:3px;">
+                    <div class="col-xs-3" style="padding-top:5px" ng-click='editRule($index)'>
+                        {{rule.rule_name}}
+                    </div>
+                    <div class="col-xs-3" style="padding-top:5px">
+                        {{rule.target_account}}
+                    </div>
+                    <div class="col-xs-2" style="padding-top:5px">
+                        {{rule.subrules.length}}
+                    </div>
+                    <div class="col-xs-2" style="padding-top:5px">
+                        {{rule.rule_on}}
+                    </div>
+                    <div class="col-xs-2">
+                        <md-button ng-click="deleteRule($index)">Delete</md-button>
+                    </div>
+                </div>
+            </md-list-item>
+            <md-divider></md-divider>
+        </md-list>
+    </div>
+</div>
