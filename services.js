@@ -15,14 +15,12 @@ reconApp.config(function ($httpProvider) {
 });
 
 
-// Get Accounts and Bank from API
-reconApp.service('getFeedLiveAccountBank', ['$http', '$q', function ($http, $q) {
-    this.liveFeed = function (search, filters) {
-        if (!search)
-            search = '';
-        if (!filters)
-            filters = {}
+// Get Customer Accounts from API
+reconApp.service('getFeedLiveAccount', ['$http', '$q', function ($http, $q) {
+    this.liveFeed = function (search, company) {
+        filters = {};
         filters.group_or_ledger = "Ledger";
+        filters.company = company;
         var snd = {
             txt: search,
             doctype: 'Account',
@@ -53,6 +51,25 @@ reconApp.service('getFeedLiveBankStatements', ['$http', '$q', function ($http, $
         }
         var promise = $q.defer();
         var url = serverBaseUrl + 'api/resource/Bank Statement?' + $.param(data);
+        $http.get(url).success(function (data) {
+            promise.resolve(data.data);
+        });
+        return promise.promise;
+    };
+}]);
+
+
+// Get Bank Account
+reconApp.service('getFeedLiveBankAccount', ['$http', '$q', function ($http, $q) {
+    this.liveFeed = function () {
+        var data = {
+            fields: JSON.stringify(["name as value", "company"]),
+            filters: JSON.stringify({
+                account_type: 'bank'
+            })
+        }
+        var promise = $q.defer();
+        var url = serverBaseUrl + 'api/resource/Account?' + $.param(data);
         $http.get(url).success(function (data) {
             promise.resolve(data.data);
         });

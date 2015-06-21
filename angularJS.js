@@ -2,10 +2,8 @@ var reconApp = angular.module('reconApp', ['ngMaterial', 'ui.router']);
 
 
 // Main Controller
-reconApp.controller('selectBank', function ($http, $scope, getFeedLiveAccountBank) {
-    getFeedLiveAccountBank.liveFeed('', filters = {
-        account_type: 'Bank'
-    }).then(function (data) {
+reconApp.controller('selectBank', function ($http, $scope, getFeedLiveBankAccount) {
+    getFeedLiveBankAccount.liveFeed().then(function (data) {
         $scope.banks = data;
     }, null);
 

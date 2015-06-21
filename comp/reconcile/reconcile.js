@@ -1,10 +1,11 @@
-reconApp.controller('reconcileController', function ($http, $scope, $mdToast, getFeedLiveReconcileStatements, getFeedLiveAccountBank) {
+reconApp.controller('reconcileController', function ($http, $scope, $mdToast, getFeedLiveReconcileStatements, getFeedLiveAccount) {
     var data_promise_bank = getFeedLiveReconcileStatements.liveFeed($scope.bank.value);
     data_promise_bank.then(function (data) {
         for (feed in data) {
             var feed_obj = data[feed];
             feed_obj.match_expanded = false;
             feed_obj.default_tab = feed_obj.match.length > 0 ? 0 : 1;
+            feed_obj.disableButton = false;
         }
         $scope.bank_feed = data;
     }, null);
@@ -20,7 +21,7 @@ reconApp.controller('reconcileController', function ($http, $scope, $mdToast, ge
     };
 
     $scope.querySearch = function (query) {
-        return getFeedLiveAccountBank.liveFeed(query);
+        return getFeedLiveAccount.liveFeed(query, $scope.bank.company);
     };
 
     $scope.reconTxn = function (index) {
@@ -37,9 +38,20 @@ reconApp.controller('reconcileController', function ($http, $scope, $mdToast, ge
             var toastRef = $mdToast.simple()
                 .content('Add Remarks')
                 .highlightAction(false);
-            account = bank.create.account ? bank.create.account.value :$mdToast.show(toastAcc) ;
-            ref = bank.create.remarks ? bank.create.remarks : $mdToast.show(toastRef);
+            if (bank.create.account)
+                account = bank.create.account.value;
+            else {
+                $mdToast.show(toastAcc);
+                return;
+            }
+            if (bank.create.remarks)
+                ref = bank.create.remarks;
+            else {
+                $mdToast.show(toastRef);
+                return;
+            }
         }
+        bank.disableButton = true;
         var data = {
             bank_txn_id: bank.bank_txn.bank_txn_id,
             voucher_id: voucher_id,
@@ -49,6 +61,12 @@ reconApp.controller('reconcileController', function ($http, $scope, $mdToast, ge
         var url = serverBaseUrl + 'api/method/erpnext.accounts.doctype.bank_statement.bank_statement.recon';
         $http.post(url, $.param(data)).success(function (data) {
             $scope.bank_feed.splice(index, 1);
+        }).error(function (data) {
+            var toastErr = $mdToast.simple()
+                .content('Error Please Wait')
+                .highlightAction(false);
+            $mdToast.show(toastErr);
+            bank.disableButton = false;
         });
     };
 

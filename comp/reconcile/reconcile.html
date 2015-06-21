@@ -46,7 +46,7 @@
                 <div class="col-xs-2" align='center'>
                     <br>
                     <br>
-                    <md-button class="md-raised" ng-click="reconTxn($index)">OK</md-button>
+                    <md-button class="md-raised" ng-disabled='feed.disableButton' ng-click="reconTxn($index)">OK</md-button>
                 </div>
                 <div class="col-xs-5" ng-include="'comp/reconcile/action_template.html'"></div>
             </div>
