@@ -1,9 +1,17 @@
 <div>
-    <div align="right">
-        <md-button class="md-raised md-primary">
-            <label for="file-input">Upload</label>
-        </md-button>
-        <input id="file-input" fileread="fdata" style="display:none;" type="file">
+    <div class='row'>
+        <div class="col-xs-2 col-xs-offset-8">
+            <md-select ng-model="bankFormat" style="min-width: 200px;">
+                <md-select-label style="font-size:15px;">{{ bankFormat ? bankFormat : 'Select Bank' }}</md-select-label>
+                <md-option ng-value="bankFormat" style="font-size:15px;" ng-repeat="bankFormat in bankFormats">{{bankFormat}}</md-option>
+            </md-select>
+        </div>
+        <div class="col-xs-2">
+            <md-button class="md-raised md-primary">
+                <label for="file-input">Upload</label>
+            </md-button>
+            <input id="file-input" fileread="fdata" style="display:none;" type="file">
+        </div>
     </div>
     <div class="row" style="margin-left:20px">
         <md-list>

@@ -2,7 +2,9 @@ reconApp.controller('bankStatementController', function ($scope, $http, getFeedL
     getFeedLiveBankStatements.liveFeed($scope.bank.value).then(function (data) {
         $scope.bank_statement = data;
     }, null);
-
+    
+    $scope.bankFormats = ['J K Bank','SBI Bank','HDFC Bank'];
+    
     // Upload File Data
     $scope.$watch('fdata', function () {
         if (!$scope.fdata)
@@ -16,7 +18,8 @@ reconApp.controller('bankStatementController', function ($scope, $http, getFeedL
             filename: 'sample',
             method: 'erpnext.accounts.doctype.bank_statement.bank_statement.upload_bank_statement',
             params: JSON.stringify({
-                bank: bank
+                bank: bank,
+                format: $scope.bankFormat
             })
         };
 
