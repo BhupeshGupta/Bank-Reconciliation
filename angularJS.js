@@ -2,7 +2,7 @@ var reconApp = angular.module('reconApp', ['ngMaterial', 'ui.router']);
 
 
 // Main Controller
-reconApp.controller('selectBank', function ($http, $scope, getFeedLiveBankAccount) {
+reconApp.controller('selectBank', function ($http, $scope, $state, getFeedLiveBankAccount) {
     getFeedLiveBankAccount.liveFeed().then(function (data) {
         $scope.banks = data;
     }, null);
@@ -26,6 +26,9 @@ reconApp.controller('selectBank', function ($http, $scope, getFeedLiveBankAccoun
             $http.post(serverBaseUrl, $.param(snd));*/
 
     });
+    $scope.transitState = function (stateurl) {
+        $state.transitionTo(stateurl);
+    };
 });
 
 
@@ -38,6 +41,7 @@ reconApp.config(function ($stateProvider, $urlRouterProvider) {
             views: {
                 'on_bank_select': {
                     templateUrl: 'content.html',
+                    controller: 'selectBank'
                 }
             }
         })

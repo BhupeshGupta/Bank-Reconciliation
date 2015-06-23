@@ -1,7 +1,19 @@
 <br>
 <br>
-<a ui-sref='.reconcile'>Reconcile</a>
-<a ui-sref='.bank_statement'>Bank Statement</a>
+<md-tabs md-dynamic-height md-border-bottom md-selected="a" class="md-primary" md-align-tabs="top">
+    <md-tab id="match" md-on-select="transitState('bank_select.reconcile')">
+        <md-tab-label>Reconcile</md-tab-label>
+        <md-tab-body>
+        </md-tab-body>
+    </md-tab>
+    <md-tab id="create" md-on-select="transitState('bank_select.bank_statement')">
+        <md-tab-label>Bank Statement</md-tab-label>
+        <md-tab-body>
+        </md-tab-body>
+    </md-tab>
+</md-tabs>
+
+
 <!--<a ui-sref='.rules'>Rules</a>-->
 <div ui-view="reconcile_view"></div>
 <div ui-view='bank_statement_view'></div>
