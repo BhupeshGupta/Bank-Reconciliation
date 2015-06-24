@@ -1,4 +1,9 @@
 reconApp.controller('bankStatementController', function ($scope, $http, getFeedLiveBankStatements) {
+    if (!$scope.bank)
+    {
+        return;
+    }
+    
     getFeedLiveBankStatements.liveFeed($scope.bank.value).then(function (data) {
         $scope.bank_statement = data;
     }, null);

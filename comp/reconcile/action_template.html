@@ -5,36 +5,53 @@
                 <md-tab-label>Match</md-tab-label>
                 <md-tab-body>
                     <br>
-                    <div class="row">
-                        <div class="col-xs-6">
+                    <div class="row" ng-if="feed.match.length == 0">
+                        <div class="col-xs-12">
+                            No Match is present in the system
+                        </div>
+                    </div>
+                    <div class="row" style="padding-bottom:5px;" ng-if="feed.match.length != 0">
+                        <div class="col-xs-2">
+                            Date:</div>
+                        <div class="col-xs-4">
+                            {{ feed.match[0].date }}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row" ng-if="feed.match.length != 0">
+                        <div class="col-xs-6" style="border-right: thin solid #aaa;min-height:60px;">
                             {{ feed.match[0].against_account }}
                         </div>
-                        <div class="col-xs-3">
+                        <div class="col-xs-3" style="border-right: thin solid #aaa;min-height:60px;">
                             <span ng-if="feed.match[0].cr_dr == 'DR'">
-                                                        {{ feed.match[0].amount }}
-                                                    </span>
+                                        {{ feed.match[0].amount }}
+                            </span>
                         </div>
                         <div class="col-xs-3">
                             <span ng-if="feed.match[0].cr_dr == 'CR'">
                                                         {{ feed.match[0].amount }}
-                                                    </span>
+                            </span>
                         </div>
                     </div>
-                    Reference:
-                    <br> {{ feed.match[0].ref }}
+                    <div class="row" ng-show="feed.match" ng-if="feed.match.length != 0">
+                        <div class="col-xs-12">
+                            Reference:
+                            <br> {{ feed.match[0].ref }}
+                        </div>
+                    </div>
                     <br>
-                    <br>
-                    <div ng-if="feed.match.length > 1">
-                        <a ng-click="toggleMatchView($index)">Expand</a>
-
+                    <div class="row" ng-if="feed.match.length > 1">
+                        <div class="col-xs-12">
+                            <a ng-click="toggleMatchView($index)">Expand</a> ({{feed.match.length - 1}} More Entries)
+                        </div>
                     </div>
                     <div ng-show="feed.match_expanded">
                         <md-list-item class="md-3-line" ng-repeat="m in feed.match">
                             <div class="row md-list-item-text">
-                                <div class="col-xs-6">
+                                <div class="col-xs-6" style="border-right: thin solid #aaa;min-height:40px;">
                                     <a ng-click="selectNew($parent.$index,$index)">{{ m.against_account }}</a>
                                 </div>
-                                <div class="col-xs-3">
+                                <div class="col-xs-3" style="border-right: thin solid #aaa;min-height:40px;">
                                     <span ng-if="m.cr_dr == 'DR'">
                                                         {{ m.amount }}
                                                     </span>

@@ -24,7 +24,7 @@ reconApp.controller('selectBank', function ($http, $scope, $state, getFeedLiveBa
             };
     
             $http.post(serverBaseUrl, $.param(snd));*/
-
+        $state.transitionTo("bank_select.reconcile");
     });
     $scope.transitState = function (stateurl) {
         $state.transitionTo(stateurl);
@@ -38,6 +38,7 @@ reconApp.config(function ($stateProvider, $urlRouterProvider) {
 
     $stateProvider.state('bank_select', {
             url: '/main',
+            abstract: true,
             views: {
                 'on_bank_select': {
                     templateUrl: 'content.html',

@@ -1,5 +1,5 @@
 reconApp.controller('reconcileController', function ($http, $scope, $mdToast, getFeedLiveReconcileStatements, getFeedLiveAccount) {
-    var data_promise_bank = getFeedLiveReconcileStatements.liveFeed($scope.bank.value);
+        var data_promise_bank = getFeedLiveReconcileStatements.liveFeed($scope.bank.value);
     data_promise_bank.then(function (data) {
         for (feed in data) {
             var feed_obj = data[feed];
@@ -9,6 +9,11 @@ reconApp.controller('reconcileController', function ($http, $scope, $mdToast, ge
         }
         $scope.bank_feed = data;
     }, null);
+
+    $scope.shiftToLast = function (index) {
+        var temp = $scope.bank_feed.splice(index, 1);
+        $scope.bank_feed.push(temp['0']);
+    };
 
     $scope.toggleMatchView = function (index) {
         var feed = $scope.bank_feed[index];

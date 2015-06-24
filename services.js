@@ -1,5 +1,39 @@
 var serverBaseUrl = 'http://localhost:8080/api/';
 
+// http error interceptor
+
+reconApp.factory('myHttpResponseInterceptor', ['$q', '$location', function ($q, $location) {
+    return {
+        responseError: function (rejection) {
+            var stat = rejection.status;
+            var msg = '';
+            if (stat == 403)
+                msg = 'Login Required';
+            else if (stat == 500)
+                msg = 'Internal Server Error';
+            else if (stat == 501)
+                msg = 'Server Error';
+            else if (stat == 502)
+                msg = 'Server is Offline';
+            else if (stat == 503)
+                msg = 'Server is Overload or down';
+            else if (stat == 504)
+                msg = 'Server is Offline';
+            else
+                msg = "Error";
+            alert(msg);
+            return $q.reject(rejection);
+        }
+    }
+}]);
+
+
+//Http Intercpetor to check auth failures for xhr requests
+reconApp.config(['$httpProvider', function ($httpProvider) {
+    $httpProvider.interceptors.push('myHttpResponseInterceptor');
+}]);
+
+
 
 // Theme Change
 reconApp.config(function ($mdThemingProvider) {
@@ -83,7 +117,7 @@ reconApp.service('getFeedLiveReconcileStatements', ['$http', '$q', function ($ht
     this.liveFeed = function (bank) {
         var data = {
             bank: bank
-            };
+        };
         var promise = $q.defer();
         var url = serverBaseUrl + 'api/method/erpnext.accounts.doctype.bank_statement.bank_statement.get_recon_list';
         $http.post(url, $.param(data)).success(function (data) {
