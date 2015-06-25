@@ -1,13 +1,21 @@
-reconApp.controller('bankStatementController', function ($scope, $http, getFeedLiveBankStatements) {
+reconApp.controller('bankStatementController', function ($scope, $mdToast, $http, getFeedLiveBankStatements) {
     if (!$scope.bank) {
         return;
     }
 
-    getFeedLiveBankStatements.liveFeed($scope.bank.value).then(function (data) {
-        $scope.bank_statement = data;
-    }, null);
+    this.getliveBank = function () {
+        getFeedLiveBankStatements.liveFeed($scope.bank.value).then(function (data) {
+            $scope.bank_statement = data;
+        }, null);
+    };
 
+    $scope.disableUpload = false;
+
+    this.getliveBank();
+    var me = this;
     $scope.bankFormats = ['J K Bank', 'SBI Bank', 'HDFC Bank'];
+    me.toastRef = $mdToast.simple()
+        .highlightAction(false);
 
     // Upload File Data
     $scope.$watch('fdata', function () {
@@ -27,6 +35,14 @@ reconApp.controller('bankStatementController', function ($scope, $http, getFeedL
             })
         };
 
-        $http.post(serverBaseUrl, $.param(snd));
+        $scope.disableUpload = true;
+        $http.post(serverBaseUrl, $.param(snd)).success(function (data) {
+            $mdToast.show(me.toastRef.content('File Successfully Upload'));
+            me.getliveBank();
+            $scope.disableUpload = false;
+        }).error(function (data) {
+            $mdToast.show(me.toastRef.content('Error: Upload once again'));
+            $scope.disableUpload = false;
+        });
     });
 });

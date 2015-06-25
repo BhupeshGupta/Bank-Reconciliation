@@ -1,7 +1,6 @@
 var serverBaseUrl = 'https://erp.arungas.com/';
 
 // http error interceptor
-
 reconApp.factory('myHttpResponseInterceptor', ['$q', '$location',
     function ($q, $location) {
         return {
