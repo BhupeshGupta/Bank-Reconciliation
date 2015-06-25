@@ -1,5 +1,5 @@
 reconApp.controller('reconcileController', function ($http, $scope, $mdToast, getFeedLiveReconcileStatements, getFeedLiveAccount) {
-        var data_promise_bank = getFeedLiveReconcileStatements.liveFeed($scope.bank.value);
+    var data_promise_bank = getFeedLiveReconcileStatements.liveFeed($scope.bank.value);
     data_promise_bank.then(function (data) {
         for (feed in data) {
             var feed_obj = data[feed];
@@ -63,7 +63,7 @@ reconApp.controller('reconcileController', function ($http, $scope, $mdToast, ge
             account: account,
             ref: ref
         };
-        var url = serverBaseUrl + 'api/method/erpnext.accounts.doctype.bank_statement.bank_statement.recon';
+        var url = serverBaseUrl + 'api/method/flows.flows.doctype.bank_statement.bank_statement.recon';
         $http.post(url, $.param(data)).success(function (data) {
             $scope.bank_feed.splice(index, 1);
         }).error(function (data) {

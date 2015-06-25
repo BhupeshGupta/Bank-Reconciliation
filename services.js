@@ -125,7 +125,7 @@ reconApp.service('getFeedLiveReconcileStatements', ['$http', '$q',
                 bank: bank
             };
             var promise = $q.defer();
-            var url = serverBaseUrl + 'api/method/erpnext.accounts.doctype.bank_statement.bank_statement.get_recon_list';
+            var url = serverBaseUrl + 'api/method/flows.flows.doctype.bank_statement.bank_statement.get_recon_list';
             $http.post(url, $.param(data)).success(function (data) {
                 promise.resolve(data.message);
             });
